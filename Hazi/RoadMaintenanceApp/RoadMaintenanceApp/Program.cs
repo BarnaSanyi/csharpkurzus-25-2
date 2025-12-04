@@ -26,7 +26,7 @@ class Program
                 switch (choice)
                 {
                     case "1":
-                        //Új utat ad hozzá
+                        AddNewRoad(service);
                         break;
                     case "2":
                         //Út módosítása
@@ -50,6 +50,37 @@ class Program
                 Console.WriteLine($"HIBA TÖRTÉNT: {ex.Message}");
                 Console.ResetColor();
             }
+        }
+
+        static void AddNewRoad(RoadService service)
+        {
+            Console.Write("ID: ");
+            string id = Console.ReadLine()!;
+
+            var condition = ReadCondition();
+
+            Console.Write("Hossz (km): ");
+            int length = int.Parse(Console.ReadLine()!);
+
+            Console.Write("Forgalom (0-10): ");
+            int traffic = int.Parse(Console.ReadLine()!);
+
+            service.AddStreet(id, condition, length, traffic);
+            Console.WriteLine("Sikeres felvétel!");
+        }
+
+        static RoadCondition ReadCondition()
+        {
+            Console.Write("Jó állapot %: ");
+            int good = int.Parse(Console.ReadLine()!);
+
+            Console.Write("Közepes állapot %: ");
+            int mid = int.Parse(Console.ReadLine()!);
+
+            Console.Write("Rossz állapot %: ");
+            int bad = int.Parse(Console.ReadLine()!);
+
+            return new RoadCondition(good, mid, bad);
         }
     }
 }

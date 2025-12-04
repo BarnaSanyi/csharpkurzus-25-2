@@ -16,5 +16,26 @@ namespace RoadMaintenanceApp.Services
             _context = context;
             _context.Database.EnsureCreated();
         }
+
+        public void AddStreet(string id, RoadCondition condition, int length, int traffic)
+        {
+            if (!condition.IsValid())
+                throw new ArgumentException("A kondíciók összegének pontosan 100-nak kell lennie! ");
+
+            if (traffic > 10) throw new ArgumentException("A forgalom szintje max 10 lehet!");
+
+            var street = new Street
+            {
+                Id = id,
+                GoodConditionPercent = condition.GoodPercent,
+                MidConditionPercent = condition.MidPercent,
+                BadConditionPercent = condition.BadPercent,
+                LengthKm = length,
+                TraficLevel = traffic
+            };
+
+            _context.Streets.Add(street);
+            _context.SaveChanges();
+        }
     }
 }
