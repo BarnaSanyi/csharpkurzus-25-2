@@ -35,7 +35,7 @@ class Program
                         DeleteRoad(service);
                         break;
                     case "4":
-                        //Keresés és listázás JSON exporttal
+                        SearchRoads(service);
                         break;
                     case "5":
                         return;
@@ -94,6 +94,49 @@ class Program
             service.DeleteRoad(id);
             Console.WriteLine("Sikeres törlés!");
         }
+
+        static void SearchRoads(RoadService service)
+        {
+            Console.WriteLine("Hagyja üresen, ami nem számít a keresésben.");
+            Console.Write("ID töredék: ");
+            string? id = Console.ReadLine();
+
+            Console.Write("Forgalmi szint: ");
+            string? traficStr = Console.ReadLine();
+            int? trafic = string.IsNullOrEmpty(traficStr) ? null : int.Parse(traficStr);
+
+            Console.Write("Hossz (Km): ");
+            string? lengthStr = Console.ReadLine();
+            int? length = string.IsNullOrEmpty(lengthStr) ? null : int.Parse(lengthStr);
+
+            Console.Write("Jó állapot % (pontos egyezés): ");
+            string? goodStr = Console.ReadLine();
+            int? good = string.IsNullOrEmpty(goodStr) ? null : int.Parse(goodStr);
+
+            Console.Write("Közepes állapot % (pontos egyezés): ");
+            string? midStr = Console.ReadLine();
+            int? mid = string.IsNullOrEmpty(midStr) ? null : int.Parse(midStr);
+
+            Console.Write("Rossz állapot % (pontos egyezés): ");
+            string? badStr = Console.ReadLine();
+            int? bad = string.IsNullOrEmpty(badStr) ? null : int.Parse(badStr);
+
+            var results = service.Search(id, trafic, length, good, mid, bad);
+
+            Console.WriteLine("\n--- Eredmények ---");
+            foreach (var r in results)
+            {
+                Console.WriteLine($"ID: {r.Id} | Good: {r.GoodConditionPercent}% | Mid: {r.MidConditionPercent}% | Bad: {r.BadConditionPercent}% | Len: {r.LengthKm} | Traf: {r.TraficLevel}");
+            }
+
+            Console.Write("\nSzeretné kimenteni az ID-kat JSON-be? (i/N): ");
+            if (Console.ReadLine()?.ToLower() == "i")
+            {
+                service.ExportIdsToJson(results, "export.json");
+                Console.WriteLine("Mentve az 'export.json' fájlba. ");
+            }
+        }
+
 
         static RoadCondition ReadCondition()
         {

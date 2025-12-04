@@ -73,5 +73,40 @@ namespace RoadMaintenanceApp.Services
                 throw new KeyNotFoundException("Nem található törlendő elem.");
             }
         }
+
+        public List<Street> Search(string? id, int? traffic, int? length, int? goodPct, int? midPct, int? badPct)
+        {
+            IQueryable<Street> query = _context.Streets;
+
+            if (!string.IsNullOrEmpty(id))
+                query = query.Where(s => s.Id.Contains(id));
+
+            if (traffic.HasValue)
+                query = query.Where(s => s.TraficLevel == traffic.Value);
+
+            if (length.HasValue)
+                query = query.Where(s => s.LengthKm == length.Value);
+
+            if (goodPct.HasValue)
+                query = query.Where(s => s.GoodConditionPercent == goodPct.Value);
+
+            if (midPct.HasValue)
+                query = query.Where(s => s.MidConditionPercent == midPct.Value);
+
+            if (badPct.HasValue)
+                query = query.Where(s => s.BadConditionPercent == badPct.Value);
+
+
+            return query.ToList();
+        }
+
+        public void ExportIdsToJson(List<Street> streets, string filePath)
+        {
+            var ids = streets.Select(s => s.Id).ToList();
+            var json = JsonSerializer.Serialize(ids, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(filePath, json);
+        }
+
+        public List<Street> GetAll() => _context.Streets.ToList();
     }
 }
