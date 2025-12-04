@@ -17,7 +17,7 @@ namespace RoadMaintenanceApp.Services
             _context.Database.EnsureCreated();
         }
 
-        public void AddStreet(string id, RoadCondition condition, int length, int traffic)
+        public void AddRoad(string id, RoadCondition condition, int length, int traffic)
         {
             if (!condition.IsValid())
                 throw new ArgumentException("A kondíciók összegének pontosan 100-nak kell lennie! ");
@@ -38,7 +38,7 @@ namespace RoadMaintenanceApp.Services
             _context.SaveChanges();
         }
 
-        public void UpdateStreet(string id, RoadCondition condition, int? length, int? traffic)
+        public void UpdateRoad(string id, RoadCondition condition, int? length, int? traffic)
         {
             var street = _context.Streets.FirstOrDefault(s => s.Id == id);
             if (street == null) throw new KeyNotFoundException("Nincs ilyen azonosítójú út.");
@@ -58,6 +58,20 @@ namespace RoadMaintenanceApp.Services
             }
 
             _context.SaveChanges();
+        }
+
+        public void DeleteRoad(string id)
+        {
+            var street = _context.Streets.FirstOrDefault(s => s.Id == id);
+            if (street != null)
+            {
+                _context.Streets.Remove(street);
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException("Nem található törlendő elem.");
+            }
         }
     }
 }

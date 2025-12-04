@@ -32,7 +32,7 @@ class Program
                         ModifyRoad(service);
                         break;
                     case "3":
-                        //Út törlése
+                        DeleteRoad(service);
                         break;
                     case "4":
                         //Keresés és listázás JSON exporttal
@@ -65,7 +65,7 @@ class Program
             Console.Write("Forgalom (0-10): ");
             int traffic = int.Parse(Console.ReadLine()!);
 
-            service.AddStreet(id, condition, length, traffic);
+            service.AddRoad(id, condition, length, traffic);
             Console.WriteLine("Sikeres felvétel!");
         }
 
@@ -83,8 +83,16 @@ class Program
             Console.Write("Új Forgalom: ");
             int traffic = int.Parse(Console.ReadLine()!);
 
-            service.UpdateStreet(id, condition, length, traffic);
+            service.UpdateRoad(id, condition, length, traffic);
             Console.WriteLine("Sikeres módosítás!");
+        }
+
+        static void DeleteRoad(RoadService service)
+        {
+            Console.Write("Törlendő ID: ");
+            string id = Console.ReadLine()!;
+            service.DeleteRoad(id);
+            Console.WriteLine("Sikeres törlés!");
         }
 
         static RoadCondition ReadCondition()
