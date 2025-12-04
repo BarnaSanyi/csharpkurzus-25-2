@@ -29,7 +29,7 @@ class Program
                         AddNewRoad(service);
                         break;
                     case "2":
-                        //Út módosítása
+                        ModifyRoad(service);
                         break;
                     case "3":
                         //Út törlése
@@ -67,6 +67,24 @@ class Program
 
             service.AddStreet(id, condition, length, traffic);
             Console.WriteLine("Sikeres felvétel!");
+        }
+
+        static void ModifyRoad(RoadService service)
+        {
+            Console.Write("Módosítandó út ID: ");
+            string id = Console.ReadLine()!;
+
+            Console.WriteLine("Adja meg az új állapot adatokat:");
+            var condition = ReadCondition();
+
+            Console.Write("Új Hossz (km): ");
+            int length = int.Parse(Console.ReadLine()!);
+
+            Console.Write("Új Forgalom: ");
+            int traffic = int.Parse(Console.ReadLine()!);
+
+            service.UpdateStreet(id, condition, length, traffic);
+            Console.WriteLine("Sikeres módosítás!");
         }
 
         static RoadCondition ReadCondition()
